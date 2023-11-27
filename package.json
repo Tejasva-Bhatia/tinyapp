@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Tejasva-Bhatia/tinyapp/issues"
   },
-  "homepage": "https://github.com/Tejasva-Bhatia/tinyapp#readme"
+  "homepage": "https://github.com/Tejasva-Bhatia/tinyapp#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
