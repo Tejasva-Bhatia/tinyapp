@@ -50,6 +50,13 @@ app.get("/urls/:id", (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render("urls_show", templateVars);
 });
+//delete entry from database
+app.post("/urls/:id/delete", (req, res) => {
+  
+  const idToRemove = req.params.id;
+  delete urlDatabase[idToRemove];
+  res.redirect('/urls');
+});
 
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
