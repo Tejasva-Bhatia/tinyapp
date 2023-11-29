@@ -53,12 +53,13 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase, username: req.cookies.username };
+  const user_id = req.cookies.user_id;
+  const templateVars = { urls: urlDatabase, user: users[user_id] };
   res.render("urls_index", templateVars);
 });
 
 app.get("/register", (req, res) => {
-  const templateVars = { urls: urlDatabase, username: req.cookies.username };
+  const templateVars = { urls: urlDatabase, user: users[req.cookies.user_id] };
   res.render("user_registration", templateVars);
 });
 
@@ -82,13 +83,16 @@ app.post("/register",(req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  const templateVars = { username: req.cookies.username };
+  const user_id = req.cookies.user_id;
+  const templateVars = { user: users[user_id] };
   res.render("urls_new", templateVars);
 });
 
 
 app.get("/urls/:id", (req, res) => {
-  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id], username: req.cookies.username };
+
+  const user_id = req.cookies.user_id;
+  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id], user: users[user_id] };
   res.render("urls_show", templateVars);
 });
 //delete entry from database
@@ -119,8 +123,8 @@ app.post("/login", (req, res) => {
 //remove cookie and implement logout
 app.post("/logout", (req, res) => {
   
-  const userName = req.body.username;
-  res.clearCookie('username', userName);
+  const user_id = req.cookies.user_id;
+  res.clearCookie('user_id', user_id);
   res.redirect('/urls');
 });
 

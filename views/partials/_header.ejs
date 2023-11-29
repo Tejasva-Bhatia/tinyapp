@@ -17,10 +17,10 @@
         <a class="nav-item nav-link" href="/urls">My URLs</a>
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div> 
-      <% if (username) { %>
+      <% if (user) { %>
         <div class="ml-auto mr-4">
           <form class="form-inline ml-auto" action="/logout" method="POST">
-          <span class="text-Black mr-2">Logged in as : <%= username %>! </span>
+          <span class="text-Black mr-2">Logged in as : <%= user.email %>! </span>
           <button type="submit" class="btn btn-outline-dark">Logout</button>
           </form>
         </div>
