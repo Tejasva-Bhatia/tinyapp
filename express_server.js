@@ -30,7 +30,15 @@ const generateRandomString = function() {
 
   return randomString;
 };
-
+//helper function
+const getUserByEmail = function(email) {
+  for (const userId in users) {
+    if (users[userId].email === email) {
+      return users[userId];
+    }
+  }
+  return null;
+};
 
 
 const urlDatabase = {
@@ -69,6 +77,18 @@ app.post("/register",(req, res) => {
   const user_email = req.body.email;
   const user_password = req.body.password;
 
+  if (!user_email || !user_password) {
+    return res.status(400).send("Email and password cannot be empty.");
+  }
+
+  // Check if email already exists
+  for (const userId in users) {
+    if (getUserByEmail(user_email)) {
+      return res.status(400).send("Email already exists. Please choose a different email.");
+    }
+  }
+
+  
   const newUser = {
     id: user_id,
     email: user_email,
@@ -78,7 +98,6 @@ app.post("/register",(req, res) => {
 
   console.log(users);
   res.cookie('user_id', user_id);
-
   res.redirect('/urls');
 });
 
