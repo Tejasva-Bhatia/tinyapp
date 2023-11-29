@@ -67,6 +67,14 @@ app.post("/urls/:id", (req, res) => {
   res.redirect('/urls');
 });
 
+// To display username using post in cookies
+app.post("/login", (req, res) => {
+  
+  const userName = req.body.username;
+  res.cookie('username', userName);
+  res.redirect('/urls');
+});
+
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = req.body.longURL;
