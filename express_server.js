@@ -6,7 +6,20 @@ app.use(cookieParser());
 
 app.set("view engine", "ejs");
 
-const generateRandomString = function () {
+const users = {
+  userRandomID: {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur",
+  },
+  user2RandomID: {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk",
+  },
+};
+
+const generateRandomString = function() {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let randomString = '';
 
@@ -47,6 +60,25 @@ app.get("/urls", (req, res) => {
 app.get("/register", (req, res) => {
   const templateVars = { urls: urlDatabase, username: req.cookies.username };
   res.render("user_registration", templateVars);
+});
+
+//register
+app.post("/register",(req, res) => {
+  const user_id = generateRandomString();
+  const user_email = req.body.email;
+  const user_password = req.body.password;
+
+  const newUser = {
+    id: user_id,
+    email: user_email,
+    password: user_password,
+  };
+  users[user_id] = newUser;
+
+  console.log(users);
+  res.cookie('user_id', user_id);
+
+  res.redirect('/urls');
 });
 
 app.get("/urls/new", (req, res) => {
