@@ -78,6 +78,14 @@ app.post("/login", (req, res) => {
   res.redirect('/urls');
 });
 
+//remove cookie and implement logout
+app.post("/logout", (req, res) => {
+  
+  const userName = req.body.username;
+  res.clearCookie('username', userName);
+  res.redirect('/urls');
+});
+
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = req.body.longURL;
