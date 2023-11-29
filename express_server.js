@@ -58,7 +58,7 @@ app.post("/urls/:id/delete", (req, res) => {
   res.redirect('/urls');
 });
 
-// To upddate a longUrl from id we get from post request
+// To update a longUrl from id we get from post request
 app.post("/urls/:id", (req, res) => {
   const idToUpdate = req.params.id;
   const newLongUrl = req.body.longURL;
