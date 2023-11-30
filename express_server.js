@@ -73,11 +73,6 @@ app.get("/login", (req, res) => {
   res.render("user_login", templateVars);
 });
 
-// app.get("/loginPage", (req, res) => {
-//   const user_id = req.cookies.user_id;
-//   const templateVars = { urls: urlDatabase, user: users[user_id] };
-//   res.render("user_login", templateVars);
-// });
 
 app.get("/register", (req, res) => {
   const templateVars = { urls: urlDatabase, user: users[req.cookies.user_id] };
@@ -101,7 +96,6 @@ app.post("/register",(req, res) => {
     }
   }
 
-  
   const newUser = {
     id: user_id,
     email: user_email,
@@ -111,7 +105,7 @@ app.post("/register",(req, res) => {
 
   console.log(users);
   res.cookie('user_id', user_id);
-  res.redirect('/urls');
+  res.redirect('/login');
 });
 
 app.get("/urls/new", (req, res) => {
@@ -144,12 +138,25 @@ app.post("/urls/:id", (req, res) => {
   res.redirect('/urls');
 });
 
-// To display username using post in cookies
 app.post("/login", (req, res) => {
-  
-  const userName = req.body.username;
-  res.cookie('username', userName);
+  const user_email = req.body.email;
+  const user_password = req.body.password;
+  const user = getUserByEmail(user_email);
+
+  if (!user) {
+    res.status(403).send("User not found");
+    return;
+  }
+
+  if (user.password !== user_password) {
+    res.status(403).send("Incorrect password");
+    return;
+  }
+
+  res.cookie('user_id', user.id);
   res.redirect('/urls');
+
+  
 });
 
 //remove cookie and implement logout
@@ -157,7 +164,7 @@ app.post("/logout", (req, res) => {
   
   const user_id = req.cookies.user_id;
   res.clearCookie('user_id', user_id);
-  res.redirect('/urls');
+  res.redirect('/login');
 });
 
 app.post("/urls", (req, res) => {
