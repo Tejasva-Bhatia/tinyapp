@@ -188,8 +188,7 @@ app.get("/u/:id", (req, res) => {
   const shortURL = req.params.id;
   const longURL = urlDatabase[shortURL];
   if (!longURL) {
-    const templateVars = { errorMessage: "This short URL does not exist." };
-    res.status(404).render("error", templateVars);
+    res.status(404).send("Id does not exist");
   } else {
     res.redirect(longURL);
   }
