@@ -105,7 +105,7 @@ app.post("/register",(req, res) => {
 
   console.log(users);
   res.cookie('user_id', user_id);
-  res.redirect('/login');
+  res.redirect('/urls');
 });
 
 app.get("/urls/new", (req, res) => {
@@ -162,8 +162,7 @@ app.post("/login", (req, res) => {
 //remove cookie and implement logout
 app.post("/logout", (req, res) => {
   
-  const user_id = req.cookies.user_id;
-  res.clearCookie('user_id', user_id);
+  res.clearCookie('user_id');
   res.redirect('/login');
 });
 
