@@ -73,6 +73,11 @@ app.get("/login", (req, res) => {
   res.render("user_login", templateVars);
 });
 
+// app.get("/loginPage", (req, res) => {
+//   const user_id = req.cookies.user_id;
+//   const templateVars = { urls: urlDatabase, user: users[user_id] };
+//   res.render("user_login", templateVars);
+// });
 
 app.get("/register", (req, res) => {
   const templateVars = { urls: urlDatabase, user: users[req.cookies.user_id] };
@@ -160,7 +165,7 @@ app.post("/urls", (req, res) => {
   urlDatabase[shortURL] = req.body.longURL;
   res.redirect(`/urls/${shortURL}`);
 
-  // console.log(req.body); // Log the POST request body to the console
+  console.log(req.body); // Log the POST request body to the console
   // res.send("Ok"); // Respond with 'Ok' (we will replace this)
 });
 
