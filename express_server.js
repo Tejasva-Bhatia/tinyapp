@@ -19,7 +19,7 @@ const users = {
   },
 };
 
-const generateRandomString = function() {
+const generateRandomString = function () {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let randomString = '';
 
@@ -31,7 +31,7 @@ const generateRandomString = function() {
   return randomString;
 };
 //helper function
-const getUserByEmail = function(email) {
+const getUserByEmail = function (email) {
   for (const userId in users) {
     if (users[userId].email === email) {
       return users[userId];
@@ -80,7 +80,7 @@ app.get("/register", (req, res) => {
 });
 
 //register
-app.post("/register",(req, res) => {
+app.post("/register", (req, res) => {
   const user_id = generateRandomString();
   const user_email = req.body.email;
   const user_password = req.body.password;
@@ -90,11 +90,10 @@ app.post("/register",(req, res) => {
   }
 
   // Check if email already exists
-  for (const userId in users) {
-    if (getUserByEmail(user_email)) {
-      return res.status(400).send("Email already exists. Please choose a different email.");
-    }
+  if (getUserByEmail(user_email)) {
+    return res.status(400).send("Email already exists. Please choose a different email.");
   }
+
 
   const newUser = {
     id: user_id,
@@ -123,7 +122,7 @@ app.get("/urls/:id", (req, res) => {
 });
 //delete entry from database
 app.post("/urls/:id/delete", (req, res) => {
-  
+
   const idToRemove = req.params.id;
   delete urlDatabase[idToRemove];
   res.redirect('/urls');
@@ -156,12 +155,12 @@ app.post("/login", (req, res) => {
   res.cookie('user_id', user.id);
   res.redirect('/urls');
 
-  
+
 });
 
 //remove cookie and implement logout
 app.post("/logout", (req, res) => {
-  
+
   res.clearCookie('user_id');
   res.redirect('/login');
 });
@@ -181,7 +180,7 @@ app.get("/u/:id", (req, res) => {
   res.redirect(longURL);
 });
 
-  
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
