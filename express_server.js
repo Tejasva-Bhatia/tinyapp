@@ -40,10 +40,10 @@ const generateRandomString = function() {
   return randomString;
 };
 //helper function
-const getUserByEmail = function (email) {
-  for (const userId in users) {
-    if (users[userId].email === email) {
-      return users[userId];
+const getUserByEmail = function (email, database) {
+  for (const userId in database) {
+    if (database[userId].email === email) {
+      return database[userId];
     }
   }
   return null;
@@ -132,7 +132,7 @@ app.post("/register", (req, res) => {
   }
 
   // Check if email already exists
-  if (getUserByEmail(user_email)) {
+  if (getUserByEmail(user_email,users)) {
     return res.status(400).send("Email already exists. Please choose a different email.");
   }
 
@@ -187,7 +187,7 @@ app.post("/urls/:id/delete", (req, res) => {
   if (!user_id) {
     return res.status(403).send("You must be logged in to delete this URL.");
   }
-  if (urlDatabase[idToRemove].user_id !== user_id) {
+  if (urlDatabase[idToRemove].userID !== user_id) {
     return res.status(403).send("You don't have permission to delete this URL.");
   }
   delete urlDatabase[idToRemove];
@@ -213,7 +213,7 @@ app.post("/urls/:id", (req, res) => {
 app.post("/login", (req, res) => {
   const user_email = req.body.email;
   const user_password = req.body.password;
-  const user = getUserByEmail(user_email);
+  const user = getUserByEmail(user_email, users);
 
   if (!user) {
     res.status(403).send("User not found");
