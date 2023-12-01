@@ -40,6 +40,17 @@ const getUserByEmail = function (email) {
   return null;
 };
 
+// Create a function to filter URLs for a specific user
+const urlsForUser = function(id) {
+  const userURLs = {};
+  for (const shortURL in urlDatabase) {
+    if (urlDatabase[shortURL].userID === id) {
+      userURLs[shortURL] = urlDatabase[shortURL];
+    }
+  }
+  return userURLs;
+};
+
 
 const urlDatabase = {
   b6UTxQ: {
@@ -68,8 +79,14 @@ app.get("/hello", (req, res) => {
 
 app.get("/urls", (req, res) => {
   const user_id = req.cookies.user_id;
-  const templateVars = { urls: urlDatabase, user: users[user_id] };
-  res.render("urls_index", templateVars);
+  if (!user_id) {
+    res.status(403).send("<html><body>You must be logged in to access URLs.</body></html>");
+  } else {
+    const userURLs = urlsForUser(user_id);
+    const templateVars = { urls: userURLs, user: users[user_id] };
+    res.render("urls_index", templateVars);
+  }
+
 });
 
 // login route
@@ -138,6 +155,15 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:id", (req, res) => {
 
   const user_id = req.cookies.user_id;
+  const shortURL = req.params.id;
+
+  if(!user_id) {
+    return res.status(403).send("You must be logged in to view this URL.");
+  }
+  if(!urlDatabase[shortURL] || urlDatabase[shortURL].userID !== user_id) {
+    return res.status(404).send("URL not found or you don't have permission to view it.");
+  }
+
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id].longURL, user: users[user_id] };
   res.render("urls_show", templateVars);
 });
