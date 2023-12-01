@@ -10,8 +10,8 @@ app.use(
     keys: ["key1", "key2"],
   })
 );
-
 const bcrypt = require("bcryptjs");
+const {getUserByEmail} = require('./helpers')
 
 app.set("view engine", "ejs");
 
@@ -39,15 +39,7 @@ const generateRandomString = function() {
 
   return randomString;
 };
-//helper function
-const getUserByEmail = function (email, database) {
-  for (const userId in database) {
-    if (database[userId].email === email) {
-      return database[userId];
-    }
-  }
-  return null;
-};
+
 
 // Create a function to filter URLs for a specific user
 const urlsForUser = function (id) {
