@@ -41,7 +41,7 @@ const getUserByEmail = function (email) {
 };
 
 // Create a function to filter URLs for a specific user
-const urlsForUser = function(id) {
+const urlsForUser = function (id) {
   const userURLs = {};
   for (const shortURL in urlDatabase) {
     if (urlDatabase[shortURL].userID === id) {
@@ -157,10 +157,10 @@ app.get("/urls/:id", (req, res) => {
   const user_id = req.cookies.user_id;
   const shortURL = req.params.id;
 
-  if(!user_id) {
+  if (!user_id) {
     return res.status(403).send("You must be logged in to view this URL.");
   }
-  if(!urlDatabase[shortURL] || urlDatabase[shortURL].userID !== user_id) {
+  if (!urlDatabase[shortURL] || urlDatabase[shortURL].userID !== user_id) {
     return res.status(404).send("URL not found or you don't have permission to view it.");
   }
 
@@ -169,8 +169,17 @@ app.get("/urls/:id", (req, res) => {
 });
 //delete entry from database
 app.post("/urls/:id/delete", (req, res) => {
-
+  const user_id = req.cookies.user_id;
   const idToRemove = req.params.id;
+  if (!urlDatabase[idToRemove]) {
+    return res.status(404).send("URL not found.");
+  }
+  if (!user_id) {
+    return res.status(403).send("You must be logged in to delete this URL.");
+  }
+  if (urlDatabase[idToRemove].user_id !== user_id) {
+    return res.status(403).send("You don't have permission to delete this URL.");
+  }
   delete urlDatabase[idToRemove];
   res.redirect('/urls');
 });
@@ -179,6 +188,13 @@ app.post("/urls/:id/delete", (req, res) => {
 app.post("/urls/:id", (req, res) => {
   const idToUpdate = req.params.id;
   const newLongUrl = req.body.longURL;
+  const user_id = req.cookies.user_id;
+  if (!user_id) {
+    return res.status(403).send("You must be logged in to view this URL.");
+  }
+  if (!urlDatabase[idToUpdate] || urlDatabase[idToUpdate].userID !== user_id) {
+    return res.status(404).send("URL not found or you don't have permission to view it.");
+  }
   urlDatabase[idToUpdate].longURL = newLongUrl;
 
   res.redirect('/urls');
