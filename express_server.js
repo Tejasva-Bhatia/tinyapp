@@ -249,11 +249,12 @@ app.post("/urls", (req, res) => {
 // Visit site using url id
 app.get("/u/:id", (req, res) => {
   const shortURL = req.params.id;
-  const longURL = urlDatabase[shortURL].longURL;
-  if (!longURL) {
-    res.status(404).send("Id does not exist");
+  const urlEntry = urlDatabase[shortURL];
+
+  if (!urlEntry) {
+    res.status(404).send("Url does not exist");
   } else {
-    res.redirect(longURL);
+    res.redirect(urlEntry.longURL);
   }
 });
 
