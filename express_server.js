@@ -140,7 +140,7 @@ app.post("/register", (req, res) => {
   res.redirect('/urls');
 });
 
-// Create new url
+// get shorten-url page
 app.get("/urls/new", (req, res) => {
   const user_id = req.session.user_id;
   if (user_id) {
